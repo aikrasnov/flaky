@@ -95,8 +95,10 @@ class FlakyPlugin(_FlakyPlugin):
                 call_info = None
                 excinfo = None
                 for when in self._PYTEST_WHENS:
-                    call_info = call_info or self._call_infos.get(item, {}).get(when, None)
-                    excinfo = excinfo or getattr(call_info, 'excinfo', None)
+                    call_info = self._call_infos.get(item, {}).get(when, None)
+                    excinfo = getattr(call_info, 'excinfo', None)
+                    if excinfo is not None:
+                        break
 
                 if call_info is None:
                     return False
