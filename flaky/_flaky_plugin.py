@@ -367,6 +367,12 @@ class _FlakyPlugin(object):
                  "least this many times (unless the test has its own flaky "
                  "decorator)."
         )
+        add_option(
+            '--rerun-filter',
+            action='store',
+            dest='rerun_filter',
+            help='If --force-flaky is specified, use this as the rerun filter '
+                 'function to determine if a test should be retried.')
 
     def _add_flaky_report(self, stream):
         """
@@ -643,7 +649,13 @@ class _FlakyPlugin(object):
                 order to add to the Flaky Report.
         :type rerun_filter:
             `callable`
+        :param rerun_filter:
+            Rerun filter function to use to determine if a test should
+            run again.
+        :type rerun_filter:
+            `function`
         """
-        attrib_dict = defaults.default_flaky_attributes(max_runs, min_passes, rerun_filter)
+        attrib_dict = defaults.default_flaky_attributes(
+            max_runs, min_passes, rerun_filter=rerun_filter)
         for attr, value in attrib_dict.items():
             cls._set_flaky_attribute(test, attr, value)
